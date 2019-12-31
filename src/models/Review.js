@@ -1,5 +1,6 @@
 import { Model } from "@nozbe/watermelondb"
 import { field, relation } from "@nozbe/watermelondb/decorators"
+import { action } from '@nozbe/watermelondb/decorators'
 
 export default class Review extends Model {
   static table = "reviews"
@@ -12,7 +13,7 @@ export default class Review extends Model {
 
   @relation("movies", "movie_id") movie
 
-  async deleteReview() {
+  @action async deleteReview() {
     await this.markAsDeleted() // syncable
     await this.destroyPermanently() // permanent
   }

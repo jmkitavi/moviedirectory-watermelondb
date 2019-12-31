@@ -123,13 +123,13 @@ class MovieForm extends Component {
   handleAddNewMovie = async () => {
     const { database } = this.props
     const movies = database.collections.get("movies")
-    const newMovie = await movies.create(movie => {
+    const newMovie = await database.action(() => movies.create(movie => {
       movie.title = this.state.title
       movie.genre = this.state.genre
       movie.posterImage = this.state.posterImage
       movie.description = this.state.description
       movie.releaseDateAt = this.state.releaseDateAt.getTime()
-    })
+    }))
     this.props.navigation.goBack()
   }
 

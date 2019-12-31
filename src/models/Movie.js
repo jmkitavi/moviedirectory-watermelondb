@@ -1,5 +1,6 @@
 import { Model } from "@nozbe/watermelondb"
 import { field, date, children } from "@nozbe/watermelondb/decorators"
+import { action } from '@nozbe/watermelondb/decorators'
 
 export default class Movie extends Model {
   static table = "movies"
@@ -27,14 +28,14 @@ export default class Movie extends Model {
     }
   }
 
-  async addReview(body) {
+  @action async addReview(body) {
     return this.collections.get("reviews").create(review => {
       review.movie.set(this)
       review.body = body
     })
   }
 
-  updateMovie = async updatedMovie => {
+  @action async updateMovie(updatedMovie) {
     await this.update(movie => {
       movie.title = updatedMovie.title
       movie.genre = updatedMovie.genre
@@ -48,7 +49,7 @@ export default class Movie extends Model {
     await this.reviews.destroyAllPermanently()
   }
 
-  async deleteMovie() {
+  @action async deleteMovie() {
     await this.deleteAllReview() // delete all reviews first
     await this.markAsDeleted() // syncable
     await this.destroyPermanently() // permanent
